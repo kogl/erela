@@ -7,6 +7,13 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
+import FBSDKLoginKit
+import FacebookCore
+
+
+var fbAccessToken: AccessToken?
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +23,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+       
+        FirebaseApp.configure()
+   
+    /*
+        if Auth.auth().currentUser == nil{
+            let storyboard = UIStoryboard(name: "main", bundle: Bundle.main)
+            let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC")
+            window?.makeKeyAndVisible()
+            window?.rootViewController?.present(loginVC, animated: true, completion: nil)
+        }
+     */
+        
+        
+        SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        
+      fbAccessToken = AccessToken.current
         return true
     }
 
@@ -39,6 +63,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+       
+        let handled: Bool = SDKApplicationDelegate.shared.application(application, open: url, options: options)
+        // Add any custom logic here.
+        return handled
     }
 
 
